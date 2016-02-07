@@ -23,14 +23,8 @@ set(BOOST_COMPONENTS_REQUIRED "")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
-# PCMSolver C++ sources
-set_property(GLOBAL PROPERTY PCMSolver_CXX_SOURCES)
-# PCMSolver C sources
-set_property(GLOBAL PROPERTY PCMSolver_C_SOURCES)
-# PCMSolver Fortran sources
-set_property(GLOBAL PROPERTY PCMSolver_Fortran_SOURCES)
-# PCMSolver headers
+# PCMSolver header directories
 set_property(GLOBAL PROPERTY PCMSolver_HEADER_DIRS)
 
 include_directories(${PROJECT_BINARY_DIR}/include)
-include_directories(SYSTEM ${SUBMODULES_INSTALL_PREFIX}/include)
+include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/src/utils/getkw)
