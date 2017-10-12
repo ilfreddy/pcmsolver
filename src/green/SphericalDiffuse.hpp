@@ -90,24 +90,28 @@ public:
   friend std::ostream & operator<<(std::ostream & os, SphericalDiffuse & gf) {
     return gf.printObject(os);
   }
+
   /*! \brief Returns Coulomb singularity separation coefficient
    *  \param[in] source location of the source charge
    *  \param[in] probe location of the probe charge
    */
   double coefficientCoulomb(const Eigen::Vector3d & source,
                             const Eigen::Vector3d & probe) const;
+
   /*! \brief Returns singular part of the Green's function
    *  \param[in] source location of the source charge
    *  \param[in] probe location of the probe charge
    */
   double Coulomb(const Eigen::Vector3d & source,
                  const Eigen::Vector3d & probe) const;
+
   /*! \brief Returns non-singular part of the Green's function (image potential)
    *  \param[in] source location of the source charge
    *  \param[in] probe location of the probe charge
    */
   double imagePotential(const Eigen::Vector3d & source,
                         const Eigen::Vector3d & probe) const;
+
   /*! Returns value of the directional derivative of the
    *  Coulomb singularity separation coefficient for the pair of points p1, p2:
    *  \f$ \nabla_{\mathbf{p_2}}G(\mathbf{p}_1, \mathbf{p}_2)\cdot
@@ -122,6 +126,7 @@ public:
   double coefficientCoulombDerivative(const Eigen::Vector3d & direction,
                                       const Eigen::Vector3d & p1,
                                       const Eigen::Vector3d & p2) const;
+
   /*! Returns value of the directional derivative of the
    *  singular part of the Greens's function for the pair of points p1, p2:
    *  \f$ \nabla_{\mathbf{p_2}}G(\mathbf{p}_1, \mathbf{p}_2)\cdot
@@ -136,6 +141,7 @@ public:
   double CoulombDerivative(const Eigen::Vector3d & direction,
                            const Eigen::Vector3d & p1,
                            const Eigen::Vector3d & p2) const;
+
   /*! Returns value of the directional derivative of the
    *  non-singular part (image potential) of the Greens's function for the pair of
    *points p1, p2:
@@ -151,11 +157,13 @@ public:
   double imagePotentialDerivative(const Eigen::Vector3d & direction,
                                   const Eigen::Vector3d & p1,
                                   const Eigen::Vector3d & p2) const;
+
   /*! Handle to the dielectric profile evaluation */
   pcm::tuple<double, double> epsilon(const Eigen::Vector3d & point) const;
   void toFile(const std::string & prefix = "");
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 private:
+
   /*! Evaluates the Green's function given a pair of points
    *  \param[in] sp the source point
    *  \param[in] pp the probe point
@@ -163,6 +171,7 @@ private:
    *  \note This takes care of the origin shift
    */
   virtual Stencil operator()(Stencil * sp, Stencil * pp) const __override;
+
   /*! Returns value of the kernel of the \f$\mathcal{D}\f$ integral operator for the
    * pair of points p1, p2:
    *  \f$ [\boldsymbol{\varepsilon}\nabla_{\mathbf{p_2}}G(\mathbf{p}_1,
@@ -180,13 +189,17 @@ private:
                               const Eigen::Vector3d & p2) const __override;
 
   virtual KernelS exportKernelS_impl() const __override;
+
   virtual KernelD exportKernelD_impl() const __override;
+
   virtual DerivativeProbe exportDerivativeProbe_impl() const __override;
 
   virtual double singleLayer_impl(const Element & e, double factor) const __override;
+
   virtual double doubleLayer_impl(const Element & e, double factor) const __override;
 
   virtual std::ostream & printObject(std::ostream & os) __override;
+
   /*! Initializes a one-layer profile
    *  \param[in] e1 left-side dielectric constant
    *  \param[in] e2 right-side dielectric constant
@@ -194,6 +207,7 @@ private:
    *  \param[in] c center of the diffuse layer
    */
   void initProfilePolicy(double e1, double e2, double w, double c);
+
   /*! This calculates all the components needed to evaluate the Green's function */
   void initSphericalDiffuse();
 
@@ -205,16 +219,19 @@ private:
   /*! Maximum angular momentum in the __final summation over Legendre polynomials to
    * obtain G */
   int maxLGreen_;
+
   /*! \brief First independent radial solution, used to build Green's function.
    *  \note The vector has dimension maxLGreen_ and has r^l behavior
    */
   std::vector<RadialFunction<detail::StateType, detail::LnTransformedRadial, Zeta> >
       zeta_;
+
   /*! \brief Second independent radial solution, used to build Green's function.
    *  \note The vector has dimension maxLGreen_  and has r^(-l-1) behavior
    */
   std::vector<RadialFunction<detail::StateType, detail::LnTransformedRadial, Omega> >
       omega_;
+
   /*! \brief Returns L-th component of the radial part of the Green's function
    *  \param[in] L  angular momentum
    *  \param[in] sp source point
@@ -228,6 +245,7 @@ private:
                                       const Eigen::Vector3d & sp,
                                       const Eigen::Vector3d & pp,
                                       double Cr12) const;
+
   /**@}*/
 
   /**@{ Parameters and functions for the calculation of the Coulomb singularity
@@ -235,15 +253,18 @@ private:
   /*! Maximum angular momentum to obtain C(r, r'), needed to separate the Coulomb
    * singularity */
   int maxLC_; // = 2 * maxLGreen_;
+
   /*! \brief First independent radial solution, used to build coefficient.
    *  \note This is needed to separate the Coulomb singularity and has r^l behavior
    */
   RadialFunction<detail::StateType, detail::LnTransformedRadial, Zeta> zetaC_;
+
   /*! \brief Second independent radial solution, used to build coefficient.
    *  \note This is needed to separate the Coulomb singularity and has r^(-l-1)
    * behavior
    */
   RadialFunction<detail::StateType, detail::LnTransformedRadial, Omega> omegaC_;
+
   /*! \brief Returns coefficient for the separation of the Coulomb singularity
    *  \param[in] sp first point
    *  \param[in] pp second point
