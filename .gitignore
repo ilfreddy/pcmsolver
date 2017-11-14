@@ -35,3 +35,7 @@
 
 # Autocmake stuff
 cmake/lib/*.pyc
+
+# Emacs backup files
+*~
+
